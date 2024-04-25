@@ -54,6 +54,7 @@ Create a global target TCP proxy `f5-tcpproxy1` to handle routing to `f5-backend
 ```bash
 gcloud compute target-tcp-proxies create f5-tcpproxy1 \
 --backend-service=f5-backendservice1 \
+--proxy-header=PROXY_V1 \
 --global
 ```
 
@@ -85,4 +86,15 @@ Tag instances `f5-bigip1` and `f5-bigip2` to include them in health checks.
 ```bash
 gcloud compute instances add-tags f5-bigip1 --tags=allow-health-checks --zone=us-east4-c
 gcloud compute instances add-tags f5-bigip2 --tags=allow-health-checks --zone=us-east4-c
+```
+
+## Step 10: Proxy Protocol v1 => X-Forwarded-For HTTP Header iRule
+```tcl
+when CLIENT_ACCEPTED {
+    # Extract the client's original IP from the Proxy Protocol header
+    set original_ip [IP::client_addr]
+    # Insert the X-Forwarded-For header with the original IP
+    HTTP::header insert X-Forwarded-For $original_ip
+    log local0. "Preserved Client IP: $original_ip via Proxy Protocol to XFF"
+}
 ```
