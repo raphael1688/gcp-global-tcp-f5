@@ -44,11 +44,11 @@ gcloud compute backend-services create f5-backendservice1 \
 Link the network endpoint group `f5-neg1` to the backend service.
 ```bash
 gcloud compute backend-services add-backend f5-backendservice1 \
-    --global \
-    --network-endpoint-group=f5-neg1 \
-    --network-endpoint-group-zone=us-east4-a \
-    --balancing-mode=CONNECTION \
-    --max-connections=5
+--global \
+--network-endpoint-group=f5-neg1 \
+--network-endpoint-group-zone=us-east4-a \
+--balancing-mode=CONNECTION \
+--max-connections=5
 ```
 
 ## Step 6: Create a Target TCP Proxy
