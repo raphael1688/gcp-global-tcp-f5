@@ -47,7 +47,7 @@ gcloud compute backend-services add-backend f5-backendservice1 \
     --global \
     --network-endpoint-group=f5-neg1 \
     --network-endpoint-group-zone=us-east4-a \
-	--balancing-mode=CONNECTION \
+    --balancing-mode=CONNECTION \
     --max-connections=5
 ```
 
