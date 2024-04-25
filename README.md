@@ -102,14 +102,6 @@ when CLIENT_ACCEPTED {
 
 This diagram illustrates how client traffic is managed through the GCP Global Load Balancer and processed by F5 BIG-IP instances before reaching the backend services.
 
-# Network Diagram for GCP and F5 BIG-IP Configuration
-
-This diagram illustrates how client traffic is managed through the GCP Global Load Balancer and processed by F5 BIG-IP instances before reaching the backend services.
-
-# Network Diagram for GCP and F5 BIG-IP Configuration
-
-This diagram illustrates how client traffic is managed through the GCP Global Load Balancer and processed by F5 BIG-IP instances before reaching the backend services.
-
 ```mermaid
 graph LR
     A[Client] -->|TCP/443| B(GCP Global Load Balancer)
