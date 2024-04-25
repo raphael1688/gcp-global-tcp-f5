@@ -98,3 +98,37 @@ when CLIENT_ACCEPTED {
     log local0. "Preserved Client IP: $original_ip via Proxy Protocol to XFF"
 }
 ```
+# Network Diagram for GCP and F5 BIG-IP Configuration
+
+This diagram illustrates how client traffic is managed through the GCP Global Load Balancer and processed by F5 BIG-IP instances before reaching the backend services.
+
+# Network Diagram for GCP and F5 BIG-IP Configuration
+
+This diagram illustrates how client traffic is managed through the GCP Global Load Balancer and processed by F5 BIG-IP instances before reaching the backend services.
+
+# Network Diagram for GCP and F5 BIG-IP Configuration
+
+This diagram illustrates how client traffic is managed through the GCP Global Load Balancer and processed by F5 BIG-IP instances before reaching the backend services.
+
+```mermaid
+graph LR
+    A[Client] -->|TCP/443| B(GCP Global Load Balancer)
+    B -->|Proxy Protocol V1| C{F5 BIG-IP Instances}
+    C -->|Insert X-Forwarded-For| D[Backend Pool Member Services]
+
+    subgraph "GCP Environment"
+    B
+    C
+    D
+    end
+
+    subgraph "F5 BIG-IP Instances"
+    F5_1[F5 BIG-IP 1 - 10.1.2.16]
+    F5_2[F5 BIG-IP 2 - 10.1.2.17]
+    end
+
+    classDef gcp fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef f5 fill:#ccf,stroke:#333,stroke-width:2px;
+    class B,C,D gcp;
+    class F5_1,F5_2 f5;
+
