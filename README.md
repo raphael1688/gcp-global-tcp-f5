@@ -27,7 +27,7 @@ gcloud compute network-endpoint-groups update f5-neg1 \
 ## Step 3: Create a Health Check
 Set up an HTTP health check `f5-healthcheck1` that uses the serving port.
 ```bash
-gcloud compute health-checks create http f5-healthcheck1 \
+gcloud compute health-checks create tcp f5-healthcheck1 \
 --use-serving-port
 ```
 
