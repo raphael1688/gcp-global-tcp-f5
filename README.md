@@ -93,12 +93,35 @@ gcloud compute instances add-tags f5-bigip2 --tags=allow-health-checks --zone=us
 ## [WORK-IN-PROGRESS / UNTESTED] Step 10: Proxy Protocol v1 => X-Forwarded-For HTTP Header iRule
 ```tcl
 when CLIENT_ACCEPTED {
-    # Extract the client's original IP from the Proxy Protocol header
-    set original_ip [IP::client_addr]
-    # Insert the X-Forwarded-For header with the original IP
-    HTTP::header insert X-Forwarded-For $original_ip
-    log local0. "Preserved Client IP: $original_ip via Proxy Protocol to XFF"
+    TCP::collect
 }
+
+when CLIENT_DATA {
+    # Proxy protocol format v1 starts with "PROXY"
+    set payload [TCP::payload]
+
+    # Look for the signature "PROXY "
+    if {[binary scan $payload c5 proxy_signature] && ($proxy_signature eq "PROXY")} {
+        # Split the payload by spaces to get the individual fields of the proxy protocol
+        set proxy_fields [split $payload " "]
+
+        # Extract client IP from the 3rd field (source address in the proxy protocol v1)
+        set client_ip [lindex $proxy_fields 2]
+
+        # Store the IP address for use later in the HTTP request
+        TCP::payload replace 0 [TCP::payload length] ""
+        TCP::release
+        set client_ip_var $client_ip
+    }
+}
+
+when HTTP_REQUEST {
+    if {[info exists client_ip_var]} {
+        # Insert the extracted IP as the X-Forwarded-For header
+        HTTP::header insert X-Forwarded-For $client_ip_var
+    }
+}
+
 ```
 # Network Diagram for GCP and F5 BIG-IP Configuration
 
